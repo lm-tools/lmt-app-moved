@@ -15,15 +15,9 @@ $ nvm install 6.11.1
 $ npm install -g npm@5.2.0
 ``` 
 
-Make sure that [PostgreSQL] is running, and that your current user (`$ whoami`)
-has full access. Alternatively, custom database details can be provided by setting
-a `DATABASE_URL` environment variable to a valid [PostgreSQL connection string]
-
 Setup the application:
 
 ```sh
-$ psql -c "create database lmt_app_moved;"
-$ psql -c "create database lmt_app_moved_test;"
 $ npm install
 $ npm run watch
 ```
