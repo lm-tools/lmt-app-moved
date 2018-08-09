@@ -24,8 +24,7 @@ $ npm run watch
 
 ## Mounting the application in a directory
 
-The app will run mounted at `/` by default. To run within a directory, set the
-`EXPRESS_BASE_PATH` environment variable.
+This app must be passed the `EXPRESS_BASE_PATH` environment variable. This determines the static page served.
 
 For example, to mount the application at `/your-work-search`, run:
 
@@ -33,12 +32,12 @@ For example, to mount the application at `/your-work-search`, run:
 $ EXPRESS_BASE_PATH=/your-work-search npm run start
 ```
 
-## Test user creation
+Then navigate to `localhost:3000/your-work-search` and you will be presented with the `your-work-search` view
 
-You can create user and then fetch all the users by executing below commands
+## Creating a new static app
 
-    $ curl -X POST http://localhost:3000/users -d '{"name":"some name","surname":"some surname123"}' -H "Content-Type: application/json"
-    $ curl http://localhost:3000/users
+You simply add your <app_name>.mustache template in the views directory, and start the app with the `EXPRESS_BASE_PATH`
+set to `/<app_name>`. Use `lmt-deploy` project to deploy and maintain a new service for this app
 
 [build status image]: https://api.travis-ci.org/lm-tools/lmt-app-moved.svg
 [ci]: https://travis-ci.org/lm-tools/lmt-app-moved
