@@ -8,5 +8,11 @@ describe('Main', () => {
     mainPage.visit()
       .then(() => expect(googleTagManagerHelper.getUserVariable()).to.equal('set-me-in-controller'))
   );
+  it('should return corresponding static view', () =>
+    mainPage.visit()
+      .then(() => expect(
+        mainPage.title()).to.eql('your work search has moved')
+      )
+  );
 });
 

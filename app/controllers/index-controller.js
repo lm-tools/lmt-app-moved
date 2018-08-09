@@ -3,9 +3,8 @@ const router = new express.Router();
 
 /* GET home page. */
 router.get('/', (req, res) => {
-  res.render('index', {
-    title: 'Express',
-  });
+  const mustacheView = process.env.EXPRESS_BASE_PATH.replace(/^\/+/, '');
+  return res.render(mustacheView);
 });
 
 module.exports = router;

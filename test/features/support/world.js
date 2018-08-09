@@ -1,4 +1,5 @@
 const Zombie = require('zombie');
+process.env.EXPRESS_BASE_PATH = process.env.EXPRESS_BASE_PATH || '/your-work-search';
 const basePath = process.env.EXPRESS_BASE_PATH || '';
 const port = require('../../common/config').port;
 const testServerPath = path => `http://localhost:${port}${basePath}${path}`;
