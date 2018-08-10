@@ -58,7 +58,8 @@ gulp.task('js-vendor', () =>
 gulp.task('js', ['browserify', 'js-vendor']);
 
 gulp.task('fonts', () =>
-  gulp.src('node_modules/font-awesome/fonts/*').pipe(gulp.dest(`${stagePath}fonts`))
+  gulp.src('node_modules/font-awesome/fonts/*')
+    .pipe(gulp.dest(`${stagePath}fonts`))
 );
 
 gulp.task('css', ['fonts'], () =>
