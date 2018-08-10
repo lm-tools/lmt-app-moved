@@ -6,7 +6,6 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
 const indexController = require('./controllers/index-controller');
-const usersController = require('./controllers/users-controller');
 const cookieController = require('./controllers/cookie-controller');
 const i18n = require('./middleware/i18n');
 const errorHandler = require('./middleware/error-handler');
@@ -14,6 +13,12 @@ const healthCheckController = require('./controllers/health-check-controller');
 const helmet = require('helmet');
 const layoutAssets = require('./models/assets');
 const cacheHeaders = require('./middleware/cacheHeaders');
+
+if (!process.env.EXPRESS_BASE_PATH) {
+  throw new Error(
+    'Must set EXPRESS_BASE_PATH env variable. This should have a corresponding mustache view'
+  );
+}
 
 const app = express();
 i18n(app);
@@ -71,13 +76,14 @@ app.use(assetPath, cacheHeaders);
 app.use(`${assetPath}vendor/v1`, express.static(path.join(__dirname, '..',
   'vendor', 'govuk_template_mustache_inheritance', 'assets')));
 
+app.use(`${assetPath}images`, express.static(path.join(__dirname, 'assets', 'images')));
+
 app.use(assetPath, express.static(path.join(__dirname, '..', 'dist', 'public')));
 
 app.use(helmet.noCache());
 
 app.use(`${basePath}/`, indexController);
 app.use(`${basePath}/`, cookieController);
-app.use(`${basePath}/users`, usersController);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

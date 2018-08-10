@@ -1,5 +1,9 @@
 const Zombie = require('zombie');
 const port = require('../../common/config').port;
+
+process.env.EXPRESS_BASE_PATH = process.env.EXPRESS_BASE_PATH || '/your-work-search';
+const basePath = process.env.EXPRESS_BASE_PATH || '';
+
 Zombie.site = `http://localhost:${port}`;
 const browser = new Zombie();
 const screenshots = require('./screenshots');
@@ -19,10 +23,11 @@ afterEach(function () {
 });
 
 module.exports = {
+  basePath,
   browser,
   googleTagManagerHelper: new GoogleTagManagerHelper(browser),
-  mainPage: new MainPage(browser),
+  mainPage: new MainPage(browser, basePath),
   errorPage: new ErrorPage(browser),
-  cookiePage: new CookiePage(browser),
+  cookiePage: new CookiePage(browser, basePath),
   app,
 };

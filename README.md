@@ -1,8 +1,8 @@
-# Hello-world
+# Lmt-app-moved
 
 [![Build status][build status image]][ci]
 
-A hello world app, based on [express], which looks like [gov.uk]
+A static page app used when an app is deprecated or moved, based on [express], which looks like [gov.uk]
 
 [![Deploy][heroku deploy image]][heroku deploy hook]
 
@@ -15,39 +15,32 @@ $ nvm install 6.11.1
 $ npm install -g npm@5.2.0
 ``` 
 
-Make sure that [PostgreSQL] is running, and that your current user (`$ whoami`)
-has full access. Alternatively, custom database details can be provided by setting
-a `DATABASE_URL` environment variable to a valid [PostgreSQL connection string]
-
 Setup the application:
 
 ```sh
-$ psql -c "create database hello_world;"
-$ psql -c "create database hello_world_test;"
 $ npm install
 $ npm run watch
 ```
 
 ## Mounting the application in a directory
 
-The app will run mounted at `/` by default. To run within a directory, set the
-`EXPRESS_BASE_PATH` environment variable.
+This app must be passed the `EXPRESS_BASE_PATH` environment variable. This determines the static page served.
 
-For example, to mount the application at `/hello-world`, run:
+For example, to mount the application at `/your-work-search`, run:
 
 ```sh
-$ EXPRESS_BASE_PATH=/hello-world npm run start
+$ EXPRESS_BASE_PATH=/your-work-search npm run start
 ```
 
-## Test user creation
+Then navigate to `localhost:3000/your-work-search` and you will be presented with the `your-work-search` view
 
-You can create user and then fetch all the users by executing below commands
+## Creating a new static app
 
-    $ curl -X POST http://localhost:3000/users -d '{"name":"some name","surname":"some surname123"}' -H "Content-Type: application/json"
-    $ curl http://localhost:3000/users
+You simply add your <app_name>.mustache template in the views directory, and start the app with the `EXPRESS_BASE_PATH`
+set to `/<app_name>`. Use `lmt-deploy` project to deploy and maintain a new service for this app
 
-[build status image]: https://api.travis-ci.org/lm-tools/hello-world.svg
-[ci]: https://travis-ci.org/lm-tools/hello-world
+[build status image]: https://api.travis-ci.org/lm-tools/lmt-app-moved.svg
+[ci]: https://travis-ci.org/lm-tools/lmt-app-moved
 [express]: http://expressjs.com/
 [gov.uk]: https://www.gov.uk/
 [heroku deploy image]: https://www.herokucdn.com/deploy/button.svg
