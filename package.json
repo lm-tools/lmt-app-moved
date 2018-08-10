@@ -11,8 +11,8 @@
     "html-lint": "gulp lint-all-html",
     "pretest": "npm run compile && eslint .",
     "test-mocha": "mocha",
-    "test": "NODE_ENV=test npm run test-mocha && NODE_ENV=test npm run features && npm run html-lint",
-    "features": "NODE_ENV=test cucumber.js && NODE_ENV=test EXPRESS_BASE_PATH=/example-base-path cucumber.js",
+    "test": "NODE_ENV=test npm run test-mocha && NODE_ENV=test npm run features && EXPRESS_BASE_PATH=/your-work-search npm run html-lint",
+    "features": "EXPRESS_BASE_PATH=/your-work-search cucumber.js",
     "heroku-postbuild": "npm run compile"
   },
   "// NOTE": [

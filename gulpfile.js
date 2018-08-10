@@ -27,7 +27,7 @@ gulp.task('lint-all-html', () => {
       .listen(port, () => accept())
   );
   return serverStartPromise.then(() => lintHtml({
-    url: `http://localhost:${port}`,
+    url: `http://localhost:${port}/${process.env.EXPRESS_BASE_PATH}`,
   }))
     .then(() => process.exit(0))
     .catch(e => gutil.log(gutil.colors.red(e)) && process.exit(1));
@@ -96,11 +96,15 @@ gulp.task('revision:rename', () =>
 );
 
 gulp.task('revision:steps', (callback) =>
-  runSequence('clean', 'js', 'css', 'revision:rename', callback)
+  runSequence('clean', 'js', 'css', 'statics', 'revision:rename', callback)
 );
 
 gulp.task('compile', ['revision:steps']);
 
+gulp.task('statics', () =>
+  gulp.src('./app/assets/robots.txt')
+    .pipe(gulp.dest('./dist/public/'))
+);
 
 gulp.task('server', () => {
   if (node) node.kill();

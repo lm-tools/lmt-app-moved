@@ -10,9 +10,13 @@ describe('Main', () => {
   );
   it('should return corresponding static view', () =>
     mainPage.visit()
-      .then(() => expect(
-        mainPage.title()).to.eql('your work search has moved')
-      )
+      .then(() => {
+        expect(mainPage.title()).to.eql('\'Record your work search\' has moved');
+        expect(mainPage.getLink()).to.eql({
+          href: 'https://www.universal-credit.service.gov.uk/sign-in',
+          text: 'Go to online account',
+        });
+      })
   );
 });
 

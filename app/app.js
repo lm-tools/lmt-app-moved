@@ -63,6 +63,7 @@ app.use((req, res, next) => {
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, '..',
   'vendor', 'govuk_template_mustache_inheritance', 'assets', 'images', 'favicon.ico')));
+app.use('/robots.txt', express.static(path.join(__dirname, 'assets', 'robots.txt')));
 
 // Configure logging
 app.use(logger.init(app.get('env')));
