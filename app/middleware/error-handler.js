@@ -15,11 +15,11 @@ module.exports = app => {
   app.use((err, req, res, next) => {
     if (app.get('env') !== 'test') {
       // eslint-disable-next-line no-console
-      logger.error(err.stack);
+      logger.error(`error getting path: ${req.path}`, err.stack);
     }
     const status = err.status || 500;
     res.status(status);
-    const model = { message: i18n.__(`error.${status}`) };
+    const model = { message: i18n.__(`error.${status}`), path: req.path };
     if (app.get('env') === 'development') {
       model.error = err;
     }

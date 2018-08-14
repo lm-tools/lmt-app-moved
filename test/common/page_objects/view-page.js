@@ -1,11 +1,12 @@
-class MainPage {
-  constructor(browser, basePath) {
+class ViewPage {
+  constructor(viewName, browser, basePath) {
+    this.viewName = viewName;
     this.browser = browser;
     this.basePath = basePath;
   }
 
   visit() {
-    return this.browser.visit(this.basePath);
+    return this.browser.visit(`${this.basePath}/${this.viewName}`);
   }
 
   title() {
@@ -39,4 +40,4 @@ class MainPage {
   }
 
 }
-module.exports = MainPage;
+module.exports = ViewPage;

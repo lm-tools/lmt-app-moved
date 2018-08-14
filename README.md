@@ -22,14 +22,35 @@ $ npm install
 $ npm run watch
 ```
 
+## Whitelisting views
+
+If you wish to only serve specific views (in addition to the error and cookie views), 
+set the `VIEWS_WHITELIST` param to a comma separated list of views. The corresponding 
+view mustache templates must match the following path convention:
+`app/views/static_<view>.mustache`
+
+For example:
+
+ ```sh
+ $ VIEWS_WHITELIST=holding,your-work-search
+ ```
+ 
+serves only these views: 
+
+```
+app/views/static_holding.mustache
+app/views/static_your-work-search.mustache
+``` 
+
 ## Mounting the application in a directory
 
-This app must be passed the `EXPRESS_BASE_PATH` environment variable. This determines the static page served.
+The app will run mounted at `/` by default. To run within a directory, set the
+`EXPRESS_BASE_PATH` environment variable.
 
-For example, to mount the application at `/your-work-search`, run:
+For example, to mount the application at `/cool-path`, run:
 
 ```sh
-$ EXPRESS_BASE_PATH=/your-work-search npm run start
+$ EXPRESS_BASE_PATH=/cool-path npm run start
 ```
 
 Then navigate to `localhost:3000/your-work-search` and you will be presented with the `your-work-search` view

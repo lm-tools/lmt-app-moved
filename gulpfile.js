@@ -27,7 +27,7 @@ gulp.task('lint-all-html', () => {
       .listen(port, () => accept())
   );
   return serverStartPromise.then(() => lintHtml({
-    url: `http://localhost:${port}${process.env.EXPRESS_BASE_PATH}`,
+    url: `http://localhost:${port}/your-work-search`,
   }))
     .then(() => process.exit(0))
     .catch(e => gutil.log(gutil.colors.red(e)) && process.exit(1));
