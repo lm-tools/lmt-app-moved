@@ -30,6 +30,12 @@ server.on('error', onError);
 server.on('listening', onListening);
 
 /**
+ * Expose server on app so that it can be stopped
+ */
+
+app.server = server;
+
+/**
  * Normalize a port into a number, string, or false.
  */
 

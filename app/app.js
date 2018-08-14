@@ -14,12 +14,6 @@ const helmet = require('helmet');
 const layoutAssets = require('./models/assets');
 const cacheHeaders = require('./middleware/cacheHeaders');
 
-if (!process.env.EXPRESS_BASE_PATH) {
-  throw new Error(
-    'Must set EXPRESS_BASE_PATH env variable. This should have a corresponding mustache view'
-  );
-}
-
 const app = express();
 i18n(app);
 app.use(helmet());
@@ -33,6 +27,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // run the whole application in a directory
 const basePath = app.locals.basePath = process.env.EXPRESS_BASE_PATH || '';
+const viewsWhitelist = process.env.VIEWS_WHITELIST && process.env.VIEWS_WHITELIST.split(',');
 const assetPath = `${basePath}/`;
 const googleTagManagerId = process.env.GOOGLE_TAG_MANAGER_ID;
 
@@ -63,6 +58,7 @@ app.use((req, res, next) => {
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, '..',
   'vendor', 'govuk_template_mustache_inheritance', 'assets', 'images', 'favicon.ico')));
+app.use('/robots.txt', express.static(path.join(__dirname, 'assets', 'robots.txt')));
 
 // Configure logging
 app.use(logger.init(app.get('env')));
@@ -82,8 +78,8 @@ app.use(assetPath, express.static(path.join(__dirname, '..', 'dist', 'public')))
 
 app.use(helmet.noCache());
 
-app.use(`${basePath}/`, indexController);
 app.use(`${basePath}/`, cookieController);
+app.use(`${basePath}/`, indexController(viewsWhitelist));
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
