@@ -1,27 +1,30 @@
 const express = require('express');
 const router = new express.Router();
 
-const renderStaticView = (req, res, next, model = {}) =>
-  res.render(`static_${req.params.view}`, model, (err, html) => {
+const renderStaticView = (staticView, req, res, next, model = {}) =>
+  res.render(`static_${staticView}`, model, (err, html) => {
     if (err) {
+      // allow 404 to be generated from error middleware
       next();
     } else {
       res.status(200).send(html);
     }
   });
 
-module.exports = viewsWhitelist => {
-  if (!viewsWhitelist || viewsWhitelist.length < 1) {
-    /* GET home page. */
-    router.get('/:view', (req, res, next) => renderStaticView(req, res, next));
+/**
+ *`
+ *
+ * @param staticView[opt] - the view to return in views/static_<viewname>.mustache.
+ * If not set, will expose every static view at ${basePath}/:view.
+ * @returns {express.Router}
+ */
+module.exports = staticView => {
+  if (!staticView) {
+    /* GET specified view */
+    router.get('/:view', (req, res, next) => renderStaticView(req.params.view, req, res, next));
   } else {
     /* GET home page. */
-    router.get('/:view', (req, res, next) => {
-      if (viewsWhitelist.includes(req.params.view)) {
-        return renderStaticView(req, res, next);
-      }
-      return next();
-    });
+    router.get('/', (req, res, next) => renderStaticView(staticView, req, res, next));
   }
   return router;
 };

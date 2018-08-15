@@ -1,8 +1,6 @@
 const Zombie = require('zombie');
 const port = require('../../common/config').port;
 
-const basePath = process.env.EXPRESS_BASE_PATH || '';
-
 Zombie.site = `http://localhost:${port}`;
 const browser = new Zombie();
 const screenshots = require('./screenshots');
@@ -15,7 +13,6 @@ const stealthyRequire = require('stealthy-require');
 
 process.env.GOOGLE_TAG_MANAGER_ID = 'fake-id';
 process.env.PORT = port;
-const app = require('../../../bin/www');
 
 afterEach(function () {
   if (this.currentTest.state === 'failed') {
@@ -23,21 +20,38 @@ afterEach(function () {
   }
 });
 
-const m = {
-  basePath,
-  browser,
-  googleTagManagerHelper: new GoogleTagManagerHelper(browser),
-  viewsPageHelper: pageName => new ViewPage(pageName, browser, basePath),
-  errorPage: new ErrorPage(browser),
-  cookiePage: new CookiePage(browser, basePath),
-  app,
-};
+class Helper {
+  constructor() {
+    this.browser = browser;
+    this.googleTagManagerHelper = new GoogleTagManagerHelper(this.browser);
+    this.errorPage = new ErrorPage(this.browser);
+    afterEach(function () {
+      if (this.currentTest.state === 'failed') {
+        screenshots.takeScreenshot(this.currentTest, this.browser);
+      }
+    });
+  }
 
-m.restartServer = () => {
-  m.app.server.close();
-  // eslint-disable-next-line global-require
-  const appFresh = stealthyRequire(require.cache, () => require('./../../../bin/www'));
-  Object.assign(m, { app: appFresh });
-};
+  getPath(path) {
+    return `${this.basePath}${path}`;
+  }
 
-module.exports = m;
+  restartServer({ view = '', basePath = '', env = 'test' }) {
+    if (this.app && this.app.server) {
+      this.app.server.close();
+    }
+    this.basePath = process.env.EXPRESS_BASE_PATH = basePath;
+    this.env = process.env.NODE_ENV = env;
+    this.view = process.env.VIEW = view;
+    // eslint-disable-next-line global-require
+    this.app = stealthyRequire(require.cache, () => require('../../../bin/www'));
+    this.genericPage = new ViewPage(this.browser, this.basePath);
+    this.cookiePage = new CookiePage(this.browser, this.basePath);
+  }
+}
+
+/**
+ * returns a singleton helper to the calling spec file.
+ * This will prevent port in use errors when restarting the server
+ */
+module.exports = new Helper();

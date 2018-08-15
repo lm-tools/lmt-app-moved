@@ -27,7 +27,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // run the whole application in a directory
 const basePath = app.locals.basePath = process.env.EXPRESS_BASE_PATH || '';
-const viewsWhitelist = process.env.VIEWS_WHITELIST && process.env.VIEWS_WHITELIST.split(',');
+const view = process.env.VIEW;
 const assetPath = `${basePath}/`;
 const googleTagManagerId = process.env.GOOGLE_TAG_MANAGER_ID;
 
@@ -79,7 +79,7 @@ app.use(assetPath, express.static(path.join(__dirname, '..', 'dist', 'public')))
 app.use(helmet.noCache());
 
 app.use(`${basePath}/`, cookieController);
-app.use(`${basePath}/`, indexController(viewsWhitelist));
+app.use(`${basePath}/`, indexController(view));
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
