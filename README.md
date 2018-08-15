@@ -49,7 +49,7 @@ For example:
  ```
  
 serves `app/views/static_your-work-search.mustache` when you go to 
-`localhost:3000/${EXPRESS_BASE_PATH}`
+`localhost:3000/your-widdle-waddle`
 
 ## Creating a new static app
 
