@@ -1,12 +1,11 @@
 class ViewPage {
-  constructor(viewName, browser, basePath) {
-    this.viewName = viewName;
+  constructor(browser, basePath) {
     this.browser = browser;
     this.basePath = basePath;
   }
 
-  visit() {
-    return this.browser.visit(`${this.basePath}/${this.viewName}`);
+  visit(path = '') {
+    return this.browser.visit(`${this.basePath}/${path}`);
   }
 
   title() {

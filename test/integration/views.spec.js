@@ -1,66 +1,70 @@
 const helper = require('./support/integrationSpecHelper');
 const googleTagManagerHelper = helper.googleTagManagerHelper;
-const viewsPageHelper = helper.viewsPageHelper;
-const yourWorkSearchPage = viewsPageHelper('your-work-search');
-const nonWhitelistedPage = viewsPageHelper('holding');
-const nonExistantPage = viewsPageHelper('does-not-exist');
 const expect = require('chai').expect;
+const basePaths = ['', '/a-rando-path'];
 
-describe('Views', () => {
-  it('should contain valid google tag manager data', () =>
-    yourWorkSearchPage.visit()
-      .then(() => expect(googleTagManagerHelper.getUserVariable()).to.equal('set-me-in-controller'))
-  );
-  describe('views whitelist specified', () => {
-    before(() => {
-      process.env.VIEWS_WHITELIST = 'your-work-search';
-      helper.restartServer();
-    });
-    it('should return whitelisted view', () =>
-      yourWorkSearchPage.visit()
-        .then(() => expect(yourWorkSearchPage.title())
-          .to.eql('\'Record your work search\' has moved'))
-    );
-    it('should return 404 for non-whitelisted view', () =>
-      nonWhitelistedPage.visit()
-        .catch(() => {})
-        .then(() => expect(helper.browser.response.status).to.equal(404))
-    );
-    it('should return 404 when no view found', () =>
-      nonExistantPage.visit()
-        .catch(() => {})
-        .then(() => expect(helper.browser.response.status).to.equal(404))
-    );
-  });
+describe('Views', () =>
+  basePaths.forEach(basePath =>
+    describe(`with basePath: ${basePath || '[none]'}`, () => {
+      before(() => {
+        helper.restartServer({ basePath });
+      });
+      it('should contain valid google tag manager data', () =>
+        helper.genericPage.visit('your-work-search')
+          .then(() => expect(googleTagManagerHelper.getUserVariable())
+            .to.equal('set-me-in-controller'))
+      );
+      describe('view specified', () => {
+        before(() => {
+          helper.restartServer({ view: 'your-work-search', basePath });
+        });
 
-  describe('views whitelist not specified', () => {
-    before(() => {
-      delete process.env.VIEWS_WHITELIST;
-      helper.restartServer();
-    });
-    it('should return view', () =>
-      nonWhitelistedPage.visit()
-        .then(() =>
-          expect(yourWorkSearchPage.title()).to.eql('Holding page')
-        )
-    );
-  });
+        it('should return view on homepage', () =>
+          helper.genericPage.visit()
+            .then(() => expect(helper.genericPage.title())
+              .to.eql('\'Record your work search\' has moved'))
+        );
 
-  describe('your-work-search', () => {
-    before(() => {
-      delete process.env.VIEWS_WHITELIST;
-      helper.restartServer();
-    });
-    it('should return corresponding static view', () =>
-      yourWorkSearchPage.visit()
-        .then(() => {
-          expect(yourWorkSearchPage.title()).to.eql('\'Record your work search\' has moved');
-          expect(yourWorkSearchPage.getLink()).to.eql({
-            href: 'https://www.universal-credit.service.gov.uk/sign-in',
-            text: 'Go to online account',
-          });
-        })
-    );
-  });
-});
+        it('should return 404 for view not specified at server start', () =>
+          helper.genericPage.visit('holding')
+            .catch(() => {
+            })
+            .then(() => expect(helper.browser.response.status).to.equal(404))
+        );
 
+        it('should return 404 when no view found', () =>
+          helper.genericPage.visit('does-not-exist')
+            .catch(() => {
+            })
+            .then(() => expect(helper.browser.response.status).to.equal(404))
+        );
+      });
+
+      describe('view not specified', () => {
+        it('should return a view not specified at server start', () => {
+          helper.restartServer({ basePath });
+          return helper.genericPage.visit('holding')
+            .then(() =>
+              expect(helper.genericPage.title()).to.eql('Holding page')
+            );
+        });
+      });
+
+      describe('your-work-search', () => {
+        before(() =>
+          helper.restartServer({ basePath })
+        );
+        it('should return corresponding static view', () =>
+          helper.genericPage.visit('your-work-search')
+            .then(() => {
+              expect(helper.genericPage.title()).to.eql('\'Record your work search\' has moved');
+              expect(helper.genericPage.getLink()).to.eql({
+                href: 'https://www.universal-credit.service.gov.uk/sign-in',
+                text: 'Go to online account',
+              });
+            })
+        );
+      });
+    })
+  )
+);
