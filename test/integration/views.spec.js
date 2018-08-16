@@ -25,18 +25,12 @@ describe('Views', () =>
               .to.eql('\'Record your work search\' has moved'))
         );
 
-        it('should return 404 for view not specified at server start', () =>
+        it('should redirect to view specified at start', () =>
           helper.genericPage.visit('holding')
-            .catch(() => {
+            .then(() => {
+              expect(helper.genericPage.title()).to.eql('\'Record your work search\' has moved');
+              expect(helper.browser.location.pathname).to.eql((basePath && `${basePath}/` || '/'));
             })
-            .then(() => expect(helper.browser.response.status).to.equal(404))
-        );
-
-        it('should return 404 when no view found', () =>
-          helper.genericPage.visit('does-not-exist')
-            .catch(() => {
-            })
-            .then(() => expect(helper.browser.response.status).to.equal(404))
         );
       });
 
@@ -48,6 +42,13 @@ describe('Views', () =>
               expect(helper.genericPage.title()).to.eql('Holding page')
             );
         });
+
+        it('should return 404 when no view found', () =>
+          helper.genericPage.visit('does-not-exist')
+            .catch(() => {
+            })
+            .then(() => expect(helper.browser.response.status).to.equal(404))
+        );
       });
 
       describe('your-work-search', () => {

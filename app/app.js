@@ -79,7 +79,7 @@ app.use(assetPath, express.static(path.join(__dirname, '..', 'dist', 'public')))
 app.use(helmet.noCache());
 
 app.use(`${basePath}/`, cookieController);
-app.use(`${basePath}/`, indexController(view));
+app.use(`${basePath}/`, indexController(view, basePath));
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
