@@ -15,6 +15,8 @@ $ nvm install 6.11.1
 $ npm install -g npm@5.2.0
 ``` 
 
+Ensure `node_modules/.bin` is on your path
+
 Setup the application:
 
 ```sh
