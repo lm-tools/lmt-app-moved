@@ -12,7 +12,8 @@
     "pretest": "npm run compile && eslint .",
     "test-mocha": "mocha",
     "test": "npm run test-mocha && npm run html-lint",
-    "heroku-postbuild": "npm run compile"
+    "heroku-postbuild": "npm run compile",
+    "preinstall": "printenv"
   },
   "// NOTE": [
     "^Pinned dependencies are actually devDependencies, which are only",
@@ -51,7 +52,7 @@
     "morgan": "^1.6.1",
     "morgan-json": "^1.1.0",
     "node-uuid": "~1.4",
-    "npm-git-secrets": "^1.0.2",
+    "npm-git-secrets": "^1.0.4",
     "pg": "^4.5.5",
     "run-sequence": "^2.2.1",
     "serve-favicon": "~2.3",
