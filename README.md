@@ -8,11 +8,10 @@ A static page app used when an app is deprecated or moved, based on [express], w
 
 ## Dev setup
 
-Use node 6.11.1 and npm >5. Setup with [nvm](https://github.com/creationix/nvm):
+Use node 12.18.3. Setup with [nvm](https://github.com/creationix/nvm):
 
 ```sh
-$ nvm install 6.11.1
-$ npm install -g npm@5.2.0
+$ nvm install 12.18.3
 ``` 
 
 Ensure `node_modules/.bin` is on your path
